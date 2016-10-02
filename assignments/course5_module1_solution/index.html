@@ -12,7 +12,7 @@
     </style>
   </head>
 <body>
-   <div class="container" controller="LunchCheckController">
+   <div class="container" ng-controller="LunchCheckController">
      <h1>Lunch Checker</h1>
 
          <div class="form-group" >
@@ -21,7 +21,7 @@
              class="form-control" ng-model="name">
          </div>
          <div class="form-group">
-             <button class="btn btn-default"  ng-click="calcItems">
+             <button class="btn btn-default"  ng-click="calcItems()">
                Check If Too Much
              </button>
          </div>
