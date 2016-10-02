@@ -31,7 +31,7 @@ function LunchCheckController($scope, $filter) {
   // $scope.feedYaakov = function () {
   //   $scope.stateOfBeing = "fed";
   // };
-}
+};
 
 function getItems(string) {
   var numItems = string.split(",");
@@ -40,8 +40,9 @@ function getItems(string) {
   //     numItems++;
   //   }
   // }
+  message = "numItems";
   return numItems;
-}
+};
 
 function messageFilter() {
   // return function (input, target, replace) {
@@ -57,6 +58,6 @@ function messageFilter() {
   else {
     message = "you must add a list of items in text box";
   }
-}
+};
 
 })();
