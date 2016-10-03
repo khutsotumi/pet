@@ -1,22 +1,24 @@
 (function () {
     'use strict';
     angular.module('LunchCheck', [])
-    .controller('LunchCheckController', LunchCheckController)
+    .controller('LunchCheckController', LunchCheckController);
     // .filter('input', inputFilter)
-    .filter('message', messageFilter);
+    //.filter('message', messageFilter);
     //LunchCheckController.$inject = ['$scope', 'inputFilter'];
-    LunchCheckController.$inject = ['$scope', '$filter'];
+    LunchCheckController.$inject = ['$scope'];
     // function LunchCheckController($scope, inputFilter) {
-    function LunchCheckController($scope, $filter) {
-      $scope.name = "";
+    function LunchCheckController($scope) {
+      $scope.name;
       $scope.calcItems = function() {
         var str = $scope.name;
         var numItems = str.split(",");
-        return numItems;
+        return numItems.length;
       } ;
       $scope.message = function() {
         var msg = "";
-        var words = calcItems();
+        var words = $scope.calcItems();
+        console.log("number of words is: " + words);
+
         if (words < 4) {
           msg = "Enjoy";
         } else if (words > 3){
