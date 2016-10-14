@@ -1,0 +1,9 @@
+<h3>Title: {{ ctrl.myTitle }}</h3>
+<ol>
+  <li ng-repeat="item in ctrl.items">
+    {{ item.name }}, {{item.short_name}}, {{ item.description }}
+    <!-- <button ng-click="list.badRemove($index);">Don't want this one!</button> -->
+    <button ng-click="ctrl.removeItem({index: $index});">Don't want this one!</button>
+  </li>
+</ol>
+<div class="error" ng-if="ctrl.nothingFound()">NOTHING FOUND</div>
