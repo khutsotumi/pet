@@ -3,13 +3,14 @@
     angular.module('NarrowItDownApp', [])
     .controller('NarrowItDownController', NarrowItDownController)
     .directive('foundItems', FoundItemsDirective)
-    .service('MenuSearchService', MenuSearchService );
+    .service('MenuSearchService', MenuSearchService )
+    .constant('Path', "http://davids-restaurant.herokuapp.com/menu_items.json");
 
     function FoundItemsDirective() {
       var ddo = {
-        templateUrl: 'matchedmenuitems.html',
+        templateUrl: 'foundItems.html',
         scope: {
-          items: '<',
+          items: '<foundItems',
           myTitle: '@title',
           onRemove: '&'
         },
@@ -22,45 +23,70 @@
     NarrowItDownController.$inject = ['MenuSearchService'];
     function NarrowItDownController(MenuSearchService) {
       var Ctrl = this;
-      var searchTerm; //where do we get this searchterm?
-      Ctrl.found = getMatchedMenuItems(searchTerm);
+      Ctrl.searchTerm = "";
+      function findItems(searchTerm){
+        Ctrl.items =   MenuSearchService.getItems(Ctrl.searchTerm);
+      };
+      // Ctrl.computeSearch = function() {
+      //   if (Ctrl.items.length > 0) {
+      //     Ctrl.items = found;
+      //   }
+      // };
+      // Ctrl.found = function (Ctrl.searchTerm) {
+      //   var foundList = [];
+      //   for (var i = 0; i < allList.length; i++) {
+      //     if (allList.description.toLowerCase().indexOf(Ctrl.searchTerm) !== -1) {
+      //       foundList.push(allMenuItems[i]);
+      //     }
+      //   }
+      //     return foundList;
+      // };
 
       Ctrl.removeItem = function(index){
-        Ctrl.found.splice(index, 1);
+        // Ctrl.found.splice(index, 1);
+        Ctrl.items.splice(index, 1);
       };
 
       Ctrl.nothingFound = function(){
-        if (Ctrl.found.length == 0 || searchTerm == undefined) {
-          return "nothing found";
+        var found = false;
+        if (Ctrl.items.length == 0 || Ctrl.searchTerm == "") {
+          found = true;
         }
-        // else {
-        //   var msg = someMethodToProcessFoundItems();
-        //   return msg;
-        // }
+        return found;
       };
 
-    };
-
-    MenuSearchService.$inject = ['$http']
-    function MenuSearchService(searchTerm){
-      //include the $http service promise call in this function
+    MenuSearchService.$inject = ['$http', 'Path']
+    function MenuSearchService($http, Path){
       var service = this;
-      var allMenuItems = getMenuItems();
-      var foundList = [];
+      var allList = [];
+      var revisedList = [];
 
-      service.getMatchedMenuItems = function(searchTerm) {
-        for (var i = 0; i < allMenuItems.length; i++) {
-          if (allMenuItems.description.toLowerCase().indexOf(searchTerm) !== -1) {
-            foundList.push(allMenuItems[i]);
+      service.getItems(searchTerm) {
+        var promise = service.getMenuItems();
+        promise.then(function(response) {
+          allList  = response.data;
+          for (var i = 0; i < allList.length; i++) {
+            if (allList.description.toLowerCase().indexOf(searchTerm) !== -1) {
+              revisedList.push(allList[i]);
+            }
           }
-        }
-          return foundList;
+        })
+        .catch(function(error){
+          console.log("something went wrong");
+        });
+        return revisedList;
       };
 
-      function getMenuItems() {
+      service.getMenuItems = function () { //make this an internal method if programme works
         var response = $http ({
           method: "GET",
-          url: ("http://davids-restaurant.herokuapp.com/menu_items.json")
+          url: (Path) //"http://davids-restaurant.herokuapp.com/menu_items.json"
+          // ,
+          // params: {
+          //   name: "name",
+          //   shortName: "short_name",
+          //   descrp: "description"
+          // }
         });
         return response
       };
