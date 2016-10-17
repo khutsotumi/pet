@@ -6,4 +6,7 @@
     <!-- <button ng-click="ctrl.removeItem({index: $index});">Don't want this one!</button> -->
   </li>
 </ol>
-<div class="error" ng-if="ctrl.nothingFound()">NOTHING FOUND</div>
+<!-- <div class="error" ng-if="ctrl.nothingFound()">NOTHING FOUND</div> -->
+<div class="error" ng-if="ctrl.messageText">
+  {{ctrl.messageText}}
+</div>

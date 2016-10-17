@@ -10,7 +10,7 @@
       var ddo = {
         templateUrl: 'foundItems.html',
         scope: {
-          items: '<foundItems',
+          items: '<foundItems',   //other code use found instead of items
           myTitle: '@title',
           onRemove: '&'
         },
@@ -24,8 +24,46 @@
     function NarrowItDownController(MenuSearchService) {
       var Ctrl = this;
       Ctrl.searchTerm = "";
-      function findItems(searchTerm){
-        Ctrl.items =   MenuSearchService.getItems(Ctrl.searchTerm);
+      Ctrl.items = [];
+      Ctrl.messageText = "";
+      Ctrl.loading = false;
+
+      var setMessageText = function(text) {
+        Ctrl.loading = false;
+        Ctrl.messageText = text;
+      };
+
+      var filteredData = function(anArray){
+        var revisedList = [];
+        for (var i = 0; i < anArray.length; i++) {
+          if (anArray.description.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1) {
+            revisedList.push(anArray[i]);
+          }
+        }
+        return revisedList;
+      };
+
+      Ctrl.findItems = function(Ctrl.searchTerm){
+        var allList = [];
+        if (!Ctrl.searchTerm) {
+          setMessageText("Please enter word to look up in textbox");
+        } else {
+          Ctrl.loading = true; //to prepare for items display
+          // var promise = MenuSearchService.getItems(Ctrl.searchTerm);
+          var promise = MenuSearchService.getMenuItems();
+          promise.then(function(response) {
+            allList  = response.data;
+            Ctrl.items = filteredData(allList);
+            if (!Ctrl.items.length) {
+              setMessageText("Nothing found");
+            } else {
+              setMessageText("");
+            }
+          })
+          .catch(function(error){
+            console.log("something went wrong");
+          });
+        };
       };
       // Ctrl.computeSearch = function() {
       //   if (Ctrl.items.length > 0) {
@@ -58,24 +96,24 @@
     MenuSearchService.$inject = ['$http', 'Path']
     function MenuSearchService($http, Path){
       var service = this;
-      var allList = [];
-      var revisedList = [];
+      // var allList = [];
+      // var revisedList = [];
 
-      service.getItems(searchTerm) {
-        var promise = service.getMenuItems();
-        promise.then(function(response) {
-          allList  = response.data;
-          for (var i = 0; i < allList.length; i++) {
-            if (allList.description.toLowerCase().indexOf(searchTerm) !== -1) {
-              revisedList.push(allList[i]);
-            }
-          }
-        })
-        .catch(function(error){
-          console.log("something went wrong");
-        });
-        return revisedList;
-      };
+      // service.getItems(searchTerm) {
+      //   var promise = service.getMenuItems();
+      //   promise.then(function(response) {
+      //     allList  = response.data;
+      //     for (var i = 0; i < allList.length; i++) {
+      //       if (allList.description.toLowerCase().indexOf(searchTerm) !== -1) {
+      //         revisedList.push(allList[i]);
+      //       }
+      //     }
+      //   })
+      //   .catch(function(error){
+      //     console.log("something went wrong");
+      //   });
+      //   return revisedList;
+      // };
 
       service.getMenuItems = function () { //make this an internal method if programme works
         var response = $http ({
