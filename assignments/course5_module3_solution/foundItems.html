@@ -1,12 +1,26 @@
-<h3>Menu items containing: {{ ctrl.myTitle }}</h3>
-<ol>
+
+<div class="items">
+<ul>
+  <li ng-repeat="item in found">
+    <span>{{ item.name }}, {{item.short_name}}, {{ item.description }}</span>
+    <button class="btn" ng-click="onRemove({idx: $index})">Don't want this one!
+    </button>
+  </li>
+</ul>
+</div>
+
+
+<!-- <h3>Menu items containing: {{ ctrl.myTitle }}</h3>
+
+<ul>
   <li ng-repeat="item in ctrl.items">
     {{ item.name }}, {{item.short_name}}, {{ item.description }}
-    <button ng-click="ctrl.onRemove(index: $index);">Don't want this one!</button>
-    <!-- <button ng-click="ctrl.removeItem({index: $index});">Don't want this one!</button> -->
+
+   <button ng-click="ctrl.removeItem({index: $index});">Don't want this one!</button>
   </li>
-</ol>
-<!-- <div class="error" ng-if="ctrl.nothingFound()">NOTHING FOUND</div> -->
-<div class="error" ng-if="ctrl.messageText">
+</ul>
+
+<div class="error" ng-if="ctrl.nothingFound()">NOTHING FOUND</div>
+<div class="error" ng-if="ctrl.nothingFound()">WARNING
   {{ctrl.messageText}}
-</div>
+</div> -->
