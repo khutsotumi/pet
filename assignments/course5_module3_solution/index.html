@@ -9,34 +9,32 @@
     <script src="app.js"></script>
 
   </head>
-<body>
-   <div class="container" ng-controller="NarrowItDownController as narrowDown">
-    <h1>Narrow Down Your Chinese Menu Choice</h1>
+  <body>
+     <div class="container" ng-controller="NarrowItDownController as ctrl">
+      <h1>Narrow Down Your Chinese Menu Choice</h1>
 
-    <div class="form-group">
-      <input type="text" ng-model="narrowDown.searchText" placeholder="search term" class="form-control">
+      <div class="form-group">
+        <input type="text" ng-model="ctrl.searchTerm" placeholder="search term" class="form-control">
+      </div>
+      <div class="form-group narrow-button">
+        <button class="btn btn-primary" ng-click="ctrl.findItems();">
+          Narrow It Down For Me!
+        </button>
+      </div>
+
+      <div ng-if="ctrl.messageText" class="error">
+          <span>{{ctrl.messageText}}</span>
+      </div>
+
+      <!-- Bonus loader (see Bonus section of the assignment) -->
+      <items-loader-indicator ng-if="ctrl.loading" class="loader">
+      </items-loader-indicator>
+
+      <found-items
+        found-items="ctrl.items"
+        on-remove="ctrl.removeItem(idx)">
+      </found-items>
     </div>
-    <div class="form-group narrow-button">
-      <button class="btn btn-primary" ng-click="narrowDown.narrowDown();">Narrow It Down For Me!</button>
-    </div>
 
-    <div ng-if="narrowDown.resultText" class="error">
-        {{narrowDown.resultText}}
-    </div>
-    <!-- <div class="error" ng-if="ctrl.nothingFound()">WARNING
-      {{ctrl.messageText}}
-    </div> -->
-
-
-
-    <!-- Bonus loader (see Bonus section of the assignment) -->
-    <!-- <items-loader-indicator></items-loader-indicator> -->
-    <!-- found-items should be implemented as a component -->
-    <found-items
-      found-items="narrowDown.items"
-      on-remove="narrowDown.removeItem(idx)">
-    </found-items>
-  </div>
-
-</body>
+  </body>
 </html>
