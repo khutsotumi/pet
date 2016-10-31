@@ -26,9 +26,9 @@
     function ItemsLoaderIndicator() {
             var ddo = {
                 restrict: "E",
-                templateUrl: '/loader/itemsLoaderIndicator.html',
+                templateUrl: 'loader/itemsLoaderIndicator.html',
                 scope: {
-                    loading: '=loading'
+                    loading: '<'  //'=loading'
                 },
                 controller: 'NarrowItDownController as ctrl',
                 bindToController: true
@@ -78,7 +78,7 @@
         if (!Ctrl.searchTerm) {
           setMessageText("Please enter word to look up in textbox");
         } else {
-          Ctrl.setMessageText = "";
+          Ctrl.messageText = "";
           Ctrl.loading = true;
           var promise = MenuSearchService.getMenuItems();
           promise.then(function(response) {
